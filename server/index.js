@@ -29,6 +29,9 @@ app.use(cors({
 
 app.use('/api/users',userRoutes)
 app.use('/api/posts',postRoutes)
+app.get('/',(req,res)=>{
+    res.send('API is running')
+})
 app.use(notFound)
 app.use(errorHandler)
 const url=process.env.MONGO__URI
