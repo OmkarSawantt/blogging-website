@@ -12,7 +12,20 @@ const app=express();
 
 app.use(express.json({extended:true}))
 app.use(express.urlencoded({extended:true}))
-app.use(cors({credentials:true, origin: 'http://localhost:3000'}))
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001',process.env.REACT_APP_URL ];
+
+app.use(cors({
+  credentials: true,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 
 app.use('/api/users',userRoutes)
 app.use('/api/posts',postRoutes)
